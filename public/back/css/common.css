@@ -127,3 +127,8 @@ a:active {
   width: 45%;
   height: 400px;
 }
+
+.table.table-bordered td {
+  text-align: center;
+  vertical-align: middle;
+}
