@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
-  <title>后台管理系统-一级分类</title>
+  <title>后台管理系统-二级分类</title>
   <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css">
   <link rel="stylesheet" href="lib/bootstrap-validator/css/bootstrapValidator.css">
   <link rel="stylesheet" href="lib/nprogress/nprogress.css">
@@ -34,8 +34,8 @@
         </a>
         <!--二级分类-->
         <div class="second">
-          <a href="first.html" class="active">一级分类</a>
-          <a href="second.html">二级分类</a>
+          <a href="first.html" >一级分类</a>
+          <a href="second.html" class="active">二级分类</a>
         </div>
       </li>
       <li>
@@ -58,7 +58,7 @@
     <ol class="breadcrumb">
       <li><a href="#">管理系统</a></li>
       <li><a href="#">分类系统</a></li>
-      <li class="active">一级分类</li>
+      <li class="active">二级分类</li>
     </ol>
 
     <!--内容区域-->
@@ -68,8 +68,10 @@
       <table class="table table-bordered ">
         <thead>
         <tr>
-          <td width="20%">序号</td>
-          <td width="80%">分类名称</td>
+          <td width="10%">序号</td>
+          <td width="30%">一级分类名称</td>
+          <td width="30%">二级分类名称</td>
+          <td width="30%">二级分类logo</td>
 
         </tr>
         </thead>
@@ -106,9 +108,9 @@
   </div>
 </div>
 
-<!--添加分类模态框-->
-<div class="modal fade" tabindex="-1" id="addtModal">
-  <div class="modal-dialog modal-sm" >
+<!--添加模态框-->
+<div class="modal fade" tabindex="-1" id="addModal">
+  <div class="modal-dialog modal-sm">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal"><span>&times;</span></button>
@@ -116,12 +118,56 @@
       </div>
       <form id="form">
         <div class="modal-body">
+
+          <!--选择一级分类-->
           <div class="form-group">
-            <input type="text" class="form-control" placeholder="请输入一级分类的名称" name="categoryName">
+            <div class="dropdown">
+              <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                <span class="dropdown-text">请选择一级分类</span>
+                <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu">
+                <!--挖个坑-->
+              </ul>
+              <!--隐藏域是为了把用户选择的一级分类所在的id传输到服务端-->
+              <input type="hidden" name="categoryId" id="categoryId">
+            </div>
           </div>
+
+          <!--输入二级分类名称-->
+          <div class="form-group">
+            <input type="text" class="form-control" placeholder="请输入二级分类的名称" name="brandName">
+          </div>
+
+          <!--上传图片-->
+          <div class="form-group">
+            <div class="fileupload_box">
+              <button class="btn btn-default">上传图片</button>
+              <!--
+                id: 为了方便获取
+                type:file: 才能上传文件
+                name: 后端才能通过name属性获取文件
+                data-url: 后端的图片上传的地址
+                multiple:多文件上传
+               -->
+              <input id="fileupload" type="file" class="btn btn-default" data-url="/category/addSecondCategoryPic" name="pic1">
+            </div>
+          </div>
+
+          <!--显示的图片-->
+          <div class="form-group img_box">
+            <img src="images/none.png" width="100" height="100" alt="">
+            <!--这个隐藏域是为了给后台传递brandLogo这个值-->
+            <input type="hidden" name="brandLogo" id="brandLogo">
+            <input type="hidden" name="hot" value="1">
+          </div>
+
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <!--需要把type改成submit才能把表单进行提交-->
+          <!--autofocus: 自动获取焦点 autocomplete:自动补全 multiple: form-->
+          <!-- form="form" 让按钮跟上面关联上了，效果就是相当于写在form内部。-->
           <button type="submit" class="btn btn-primary">添加</button>
         </div>
       </form>
@@ -131,23 +177,34 @@
 
 
 
+
+
 <!--准备模版-->
 <script type="text/html" id="tpl">
   {{ each rows v i }}
-    <tr>
-      <td>{{ (page-1)*size + i + 1 }}</td>
-      <td>{{ v.categoryName }}</td>
-    </tr>
+  <tr>
+    <td>{{ (page-1)*size + i + 1 }}</td>
+    <td>{{ v.categoryName }}</td>
+    <td>{{ v.brandName }}</td>
+    <td><img src="{{ v.brandLogo ? v.brandLogo : 'images/none.png'}}" alt="" height='50' width='50'> </td>
+  </tr>
+  {{ /each }}
+</script>
+
+<script type="text/html" id="menuTpl">
+  {{ each rows v i }}
+    <li><a href="javascript:;" data-id="{{ v.id }}">{{ v.categoryName }}</a></li>
   {{ /each }}
 </script>
 <script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/jquery-fileupload/jquery.ui.widget.js"></script>
+<script src="lib/jquery-fileupload/jquery.fileupload.js"></script>
 <script src="lib/bootstrap/js/bootstrap.js"></script>
 <script src="lib/bootstrap-validator/js/bootstrapValidator.js"></script>
 <script src="lib/bootstrap-paginator/bootstrap-paginator.js"></script>
 <script src="lib/nprogress/nprogress.js"></script>
 <script src="lib/artTemplate/template-web.js"></script>
-<script src="lib/echarts/echarts.min.js"></script>
 <script src="js/common.js"></script>
-<script src="js/first.js"></script>
+<script src="js/second.js"></script>
 </body>
 </html>
